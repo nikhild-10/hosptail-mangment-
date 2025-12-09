@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Input, Card, CardHeader, CardContent } from '@/components/ui';
 
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import api from '@/lib/api';
 
 export default function PatientRegister() {
     const router = useRouter();
@@ -25,13 +24,20 @@ export default function PatientRegister() {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
-            console.log('Firebase Register Success');
-            // Ideally update profile with name here
+            const res = await api.post('/auth/register', {
+                name,
+                email,
+                password,
+                role: 'PATIENT'
+            });
+
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+
             router.push('/portal/patient/dashboard');
         } catch (err: any) {
             console.error('Registration failed', err);
-            setError(err.message);
+            setError(err.response?.data?.message || 'Registration failed');
         }
     };
 

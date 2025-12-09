@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Input, Card, CardHeader, CardContent } from '@/components/ui';
 
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import api from '@/lib/api';
 
 export default function PatientLogin() {
     const router = useRouter();
@@ -18,12 +17,19 @@ export default function PatientLogin() {
         e.preventDefault();
         setError('');
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            console.log('Firebase Login Success');
-            router.push('/portal/patient/dashboard');
+            const res = await api.post('/auth/login', { email, password });
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+
+            if (res.data.user.role === 'PATIENT') {
+                router.push('/portal/patient/dashboard');
+            } else {
+                setError('This portal is for patients only.');
+                localStorage.clear();
+            }
         } catch (err: any) {
             console.error('Login failed', err);
-            setError(err.message);
+            setError(err.response?.data?.message || 'Login failed');
         }
     };
 

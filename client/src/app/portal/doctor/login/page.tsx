@@ -5,16 +5,30 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Input, Card, CardHeader, CardContent } from '@/components/ui';
 
+import api from '@/lib/api';
+
 export default function DoctorLogin() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Logging in doctor with', email);
-        // In real app: call API, store token
-        router.push('/portal/doctor/dashboard');
+        try {
+            const res = await api.post('/auth/login', { email, password });
+
+            if (res.data.user.role === 'DOCTOR') {
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user', JSON.stringify(res.data.user));
+                router.push('/portal/doctor/dashboard');
+            } else {
+                setError('Access Denied. Doctors only.');
+                localStorage.clear();
+            }
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Login failed');
+        }
     };
 
     return (
