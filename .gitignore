@@ -6,3 +6,7 @@ build/
 *.log
 coverage/
 .vscode/
+.next/
+out/
+client/.next/
+client/out/
