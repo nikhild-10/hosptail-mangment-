@@ -43,6 +43,7 @@ export function Navbar() {
                         <Link href="/portal/doctor/login" className="px-5 py-2.5 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
                             Doctor Access
                         </Link>
+                        <NotificationBell />
                         <ThemeToggle />
                         <button
                             onClick={startListening}
