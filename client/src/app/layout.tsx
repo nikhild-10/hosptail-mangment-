@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 import { Providers } from './providers'
 import { SOSButton } from '@/components/SOSButton'
+import { NotificationProvider } from '@/context/NotificationContext'
 
 export default function RootLayout({
     children,
@@ -22,9 +23,11 @@ export default function RootLayout({
         <html lang="en" suppressHydrationWarning>
             <body className={inter.className}>
                 <Providers>
-                    {children}
-                    <Chatbot />
-                    <SOSButton />
+                    <NotificationProvider>
+                        {children}
+                        <Chatbot />
+                        <SOSButton />
+                    </NotificationProvider>
                 </Providers>
             </body>
         </html>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Activity, Mic } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { useVoiceNavigation } from '@/hooks/useVoiceNavigation';
+import { NotificationBell } from './NotificationBell';
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
