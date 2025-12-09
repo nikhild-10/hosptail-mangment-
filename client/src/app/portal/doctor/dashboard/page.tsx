@@ -1,83 +1,93 @@
-import { Card, CardContent, CardHeader } from '@/components/ui';
-import { Calendar, Users, Clock, Activity } from 'lucide-react';
+'use client';
+
+import React from 'react';
+import { Users, Calendar, Activity, Clock, Video, FileText, Smartphone } from 'lucide-react';
 
 export default function DoctorDashboard() {
     return (
-        <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-slate-800">Doctor Dashboard</h1>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <Card className="bg-white">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <h3 className="text-sm font-medium text-gray-500">Total Patients</h3>
-                        <Users className="h-4 w-4 text-blue-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">1,234</div>
-                        <p className="text-xs text-gray-400 mt-1">+12% from last month</p>
-                    </CardContent>
-                </Card>
-
-                <Card className="bg-white">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <h3 className="text-sm font-medium text-gray-500">Appointments Today</h3>
-                        <Calendar className="h-4 w-4 text-blue-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">8</div>
-                        <p className="text-xs text-gray-400 mt-1">3 Telemedicine, 5 In-person</p>
-                    </CardContent>
-                </Card>
-
-                <Card className="bg-white">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <h3 className="text-sm font-medium text-gray-500">Pending Reports</h3>
-                        <Activity className="h-4 w-4 text-blue-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">12</div>
-                        <p className="text-xs text-gray-400 mt-1">Requires review</p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-white">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <h3 className="text-sm font-medium text-gray-500">Avg. Wait Time</h3>
-                        <Clock className="h-4 w-4 text-blue-600" />
-                    </CardHeader>
-                    <CardContent>
-                        <div className="text-2xl font-bold">12m</div>
-                        <p className="text-xs text-gray-400 mt-1">-2m improvement</p>
-                    </CardContent>
-                </Card>
+        <div className="p-8 space-y-8 animate-fade-in-up">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Doctor Dashboard</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-2">Welcome back, Dr. Wilson. You have 4 appointments today.</p>
+                </div>
+                <div className="flex gap-4">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                        <Video size={18} /> Start Telemedicine
+                    </button>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card className="bg-white">
-                    <CardHeader>
-                        <h3 className="text-lg font-bold">Today's Schedule</h3>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
-                                    <div className="flex gap-3 items-center">
-                                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
-                                            JS
-                                        </div>
-                                        <div>
-                                            <p className="font-medium">John Smith</p>
-                                            <p className="text-xs text-gray-500">General Checkup</p>
-                                        </div>
+            {/* Stats Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                    { label: 'Pending Appointments', value: '12', icon: Calendar, color: 'blue' },
+                    { label: 'Total Patients', value: '1,234', icon: Users, color: 'purple' },
+                    { label: 'Consultations', value: '85', icon: Activity, color: 'green' },
+                    { label: 'Online Now', value: '3', icon: Smartphone, color: 'orange' },
+                ].map((stat, i) => (
+                    <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</p>
+                                <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-2">{stat.value}</h3>
+                            </div>
+                            <div className={`p-3 bg-${stat.color}-50 dark:bg-${stat.color}-900/20 text-${stat.color}-600 rounded-xl`}>
+                                <stat.icon size={24} />
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Patient Queue */}
+                <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                        <h3 className="font-bold text-lg text-slate-900 dark:text-white">Patient Queue</h3>
+                        <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Live</span>
+                    </div>
+                    <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div key={i} className="p-6 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center font-bold text-slate-600 dark:text-slate-300">
+                                        {String.fromCharCode(64 + i)}
                                     </div>
-                                    <div className="text-right">
-                                        <p className="font-bold text-sm">09:30 AM</p>
-                                        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Confirmed</span>
+                                    <div>
+                                        <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors">Patient Name {i}</h4>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                                            <Clock size={14} /> 10:{i}0 AM • General Checkup
+                                        </p>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                                <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button className="px-4 py-2 text-sm font-medium bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">Review</button>
+                                    <button className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700">Call</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-6">
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-6">Recent Activity</h3>
+                    <div className="space-y-6">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="flex gap-4">
+                                <div className="mt-1">
+                                    <div className="w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-100 dark:ring-blue-900/30"></div>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-slate-900 dark:text-slate-200 font-medium">New Prescription Created</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">For Patient #1023 • Amoxicillin</p>
+                                    <p className="text-xs text-slate-400 mt-2">2 hours ago</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
