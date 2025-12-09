@@ -18,12 +18,16 @@ import appointmentRoutes from './routes/appointment.routes';
 import doctorRoutes from './routes/doctor.routes';
 import patientRoutes from './routes/patient.routes';
 import billingRoutes from './routes/billing.routes';
+import donationRoutes from './routes/donation.routes';
+import notificationRoutes from './routes/notification.routes';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/billing', billingRoutes);
+app.use('/api/donations', donationRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Health Check
 app.get('/api/health', (req: Request, res: Response) => {

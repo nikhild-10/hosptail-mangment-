@@ -40,3 +40,25 @@ export const updateProfile = async (req: Request & { user?: any }, res: Response
         res.status(500).json({ message: 'Error updating profile' });
     }
 };
+
+export const getHistory = async (req: Request & { user?: any }, res: Response) => {
+    try {
+        const userId = req.user.id;
+        const patient = await prisma.patient.findUnique({ where: { userId } });
+
+        if (!patient) return res.status(404).json({ message: 'Patient not found' });
+
+        const history = await prisma.appointment.findMany({
+            where: { patientId: patient.id, status: 'COMPLETED' },
+            include: {
+                doctor: { include: { user: { select: { name: true } } } },
+                prescription: true
+            },
+            orderBy: { date: 'desc' }
+        });
+
+        res.json(history);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching history' });
+    }
+};
