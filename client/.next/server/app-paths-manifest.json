@@ -1,0 +1,12 @@
+{
+  "/_not-found": "app/_not-found.js",
+  "/portal/admin/dashboard/page": "app/portal/admin/dashboard/page.js",
+  "/page": "app/page.js",
+  "/portal/admin/login/page": "app/portal/admin/login/page.js",
+  "/portal/doctor/login/page": "app/portal/doctor/login/page.js",
+  "/portal/doctor/dashboard/page": "app/portal/doctor/dashboard/page.js",
+  "/portal/patient/dashboard/page": "app/portal/patient/dashboard/page.js",
+  "/portal/patient/login/page": "app/portal/patient/login/page.js",
+  "/portal/patient/register/page": "app/portal/patient/register/page.js",
+  "/portal/patient/telemedicine/page": "app/portal/patient/telemedicine/page.js"
+}

@@ -1,0 +1,230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  role          String    @default("PATIENT") // ADMIN, DOCTOR, NURSE, RECEPTIONIST, LAB_TECHNICIAN, PHARMACIST, PATIENT
+  name          String
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  patient       Patient?
+  doctor        Doctor?
+  staff         Staff?
+  notifications Notification[]
+  bloodDonor    BloodDonor?
+  bloodResponses BloodResponse[]
+}
+
+model Patient {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  dob             DateTime?
+  gender          String? // MALE, FEMALE, OTHER
+  bloodGroup      String? // A_POSITIVE, etc.
+  address         String?
+  allergies       String?
+  chronicDiseases String?
+  emergencyContact String?
+  
+  appointments    Appointment[]
+  prescriptions   Prescription[]
+  bills           Bill[]
+  labOrders       LabOrder[]
+  admissions      Admission[]
+}
+
+model Doctor {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  specialization  String
+  consultationFee Float
+  roomNumber      String?
+  availability    String?    // JSON string: { "mon": ["09:00", "12:00"], ... }
+  
+  appointments    Appointment[]
+  prescriptions   Prescription[]
+  labOrders       LabOrder[] 
+}
+
+model Staff {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  designation     String
+  department      String?
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+  patientId   String
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  doctorId    String
+  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  date        DateTime
+  status      String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
+  type        String   // ONLINE, OFFLINE
+  notes       String?
+  
+  prescription Prescription?
+  bill         Bill?
+  labOrders    LabOrder[]
+  videoCall    VideoCall?
+}
+
+model Prescription {
+  id            String   @id @default(uuid())
+  appointmentId String   @unique
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  doctorId      String
+  doctor        Doctor   @relation(fields: [doctorId], references: [id])
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  notes         String?
+  createdAt     DateTime @default(now())
+  
+  items         PrescriptionItem[]
+}
+
+model PrescriptionItem {
+  id             String       @id @default(uuid())
+  prescriptionId String
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  medicineName   String
+  dosage         String
+  frequency      String
+  duration       String
+  instructions   String?
+}
+
+model Bill {
+  id            String   @id @default(uuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  appointmentId String?  @unique
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  totalAmount   Float
+  status        String   @default("UNPAID") // PAID, UNPAID, PARTIAL
+  paymentMethod String?
+  date          DateTime @default(now())
+  
+  items         BillItem[]
+}
+
+model BillItem {
+  id          String @id @default(uuid())
+  billId      String
+  bill        Bill   @relation(fields: [billId], references: [id])
+  description String
+  quantity    Int
+  unitPrice   Float
+  amount      Float
+}
+
+model Medicine {
+  id            String   @id @default(uuid())
+  name          String
+  brand         String?
+  stockQuantity Int
+  unitPrice     Float
+  expiryDate    DateTime
+  reorderLevel  Int
+}
+
+model LabOrder {
+  id            String   @id @default(uuid())
+  patientId     String
+  patient       Patient  @relation(fields: [patientId], references: [id])
+  doctorId      String
+  doctor        Doctor   @relation(fields: [doctorId], references: [id])
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  status        String   @default("ORDERED") 
+  createdAt     DateTime @default(now())
+  
+  items         LabOrderItem[]
+}
+
+model LabOrderItem {
+  id         String   @id @default(uuid())
+  labOrderId String
+  labOrder   LabOrder @relation(fields: [labOrderId], references: [id])
+  testName   String
+  resultValue String?
+  resultNotes String?
+  reportUrl  String?
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  type      String   
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model BloodRequest {
+  id           String        @id @default(uuid())
+  bloodGroup   String        // A_POSITIVE etc
+  unitsNeeded  Int
+  message      String
+  status       String        @default("ACTIVE") 
+  createdAt    DateTime      @default(now())
+  
+  responses    BloodResponse[]
+}
+
+model BloodResponse {
+  id            String       @id @default(uuid())
+  requestId     String
+  request       BloodRequest @relation(fields: [requestId], references: [id])
+  userId        String?
+  user          User?        @relation(fields: [userId], references: [id])
+  status        String       
+  createdAt     DateTime     @default(now())
+}
+
+model BloodDonor {
+  id          String     @id @default(uuid())
+  userId      String     @unique
+  user        User       @relation(fields: [userId], references: [id])
+  bloodGroup  String
+  lastDonated DateTime?
+  availability Boolean   @default(true)
+}
+
+model VideoCall {
+  id            String   @id @default(uuid())
+  appointmentId String?  @unique
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id])
+  roomId        String
+  startedAt     DateTime?
+  endedAt       DateTime?
+  status        String   
+}
+
+model Admission {
+  id           String    @id @default(uuid())
+  patientId    String
+  patient      Patient   @relation(fields: [patientId], references: [id])
+  bedNumber    String
+  ward         String
+  admittedAt   DateTime  @default(now())
+  dischargedAt DateTime?
+  status       String    @default("ADMITTED")
+}
