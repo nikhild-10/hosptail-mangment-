@@ -5,30 +5,40 @@ import { getImagePath } from '@/lib/utils';
 
 export default function Home() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-white">
-            <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-                <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
+        <main className="flex min-h-screen flex-col items-center justify-between p-12 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+            <div className="w-full max-w-5xl items-center justify-center font-mono text-sm flex mb-12">
+                <p className="flex w-auto justify-center border rounded-full border-gray-200 bg-white/50 px-8 py-3 backdrop-blur-xl shadow-sm text-slate-600 hover:shadow-md transition-all cursor-default">
                     Hospital Management System & Telemedicine Platform
                 </p>
             </div>
 
-            <div className="relative flex flex-col items-center place-items-center">
-                <div className="mb-10 relative w-[600px] h-[400px]">
+            <div className="relative flex flex-col items-center place-items-center mb-16">
+                <div className="relative w-[600px] h-[400px] mb-8 group perspective-1000">
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity animate-pulse"></div>
                     <Image
                         src={getImagePath("/hero.png")}
                         alt="Hospital Building and Telemedicine"
                         fill
-                        className="object-cover rounded-2xl shadow-2xl"
+                        className="object-cover rounded-3xl shadow-2xl transition-transform duration-500 hover:scale-[1.02] hover:rotate-1"
                         priority
                     />
                 </div>
-                <div className="text-center">
-                    <h1 className="text-6xl font-bold text-slate-800 mb-6">HealWaitless</h1>
-                    <p className="text-xl text-slate-600">The advanced healthcare platform for everyone.</p>
+                <div className="text-center space-y-6 max-w-3xl">
+                    <h1 className="text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 tracking-tight">
+                        HealWaitless
+                    </h1>
+                    <div className="space-y-4">
+                        <p className="text-2xl font-medium text-slate-700">
+                            The advanced healthcare platform for everyone.
+                        </p>
+                        <blockquote className="text-xl italic text-slate-500 font-light border-l-4 border-blue-400 pl-4 py-1 mx-auto max-w-2xl bg-white/50 rounded-r-lg">
+                            "Bridging the gap between care and convenience, because your health can't wait."
+                        </blockquote>
+                    </div>
                 </div>
             </div>
 
-            <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left gap-8">
+            <div className="mb-32 grid text-center lg:max-w-6xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left gap-8 px-4">
 
                 <Link
                     href="/portal/patient/login"
