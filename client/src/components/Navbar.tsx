@@ -1,13 +1,14 @@
 'use client';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, Activity } from 'lucide-react';
+import { Menu, X, Activity, Mic } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
-
+import { useVoiceNavigation } from '@/hooks/useVoiceNavigation';
 
 export function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { isListening, startListening } = useVoiceNavigation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -42,6 +43,13 @@ export function Navbar() {
                             Doctor Access
                         </Link>
                         <ThemeToggle />
+                        <button
+                            onClick={startListening}
+                            className={`p-2 rounded-lg transition-colors ${isListening ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-slate-200'}`}
+                            title="Voice Navigation (Try 'Dark Mode', 'Go Home')"
+                        >
+                            <Mic size={20} />
+                        </button>
                     </div>
                 </div>
 
