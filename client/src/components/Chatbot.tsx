@@ -97,13 +97,17 @@ export function Chatbot() {
             const genAI = new GoogleGenerativeAI(apiKey);
             const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-            const history = messages.map(m => ({
-                role: m.role,
-                parts: [{ text: m.text }]
-            }));
+            // Filter out the welcome message or any leading model messages for the API history
+            // API requires history to start with 'user'
+            const apiHistory = messages
+                .filter(m => m.id !== 'welcome') // Remove welcome message
+                .map(m => ({
+                    role: m.role,
+                    parts: [{ text: m.text }]
+                }));
 
             const chat = model.startChat({
-                history: history,
+                history: apiHistory,
             });
 
             const result = await chat.sendMessage(userMessage.text);
