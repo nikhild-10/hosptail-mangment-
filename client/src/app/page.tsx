@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getImagePath } from '@/lib/utils';
+
 
 export default function Home() {
     return (
@@ -13,7 +15,7 @@ export default function Home() {
             <div className="relative flex flex-col items-center place-items-center">
                 <div className="mb-10 relative w-[600px] h-[400px]">
                     <Image
-                        src="/hero.png"
+                        src={getImagePath("/hero.png")}
                         alt="Hospital Building and Telemedicine"
                         fill
                         className="object-cover rounded-2xl shadow-2xl"
@@ -35,7 +37,7 @@ export default function Home() {
                     <div className="flex flex-col items-center mb-4">
                         <div className="relative w-24 h-24 mb-4">
                             <Image
-                                src="/patient.png"
+                                src={getImagePath("/patient.png")}
                                 alt="Patient Portal"
                                 fill
                                 className="object-contain"
@@ -61,7 +63,7 @@ export default function Home() {
                     <div className="flex flex-col items-center mb-4">
                         <div className="relative w-24 h-24 mb-4">
                             <Image
-                                src="/doctor.png"
+                                src={getImagePath("/doctor.png")}
                                 alt="Doctor Portal"
                                 fill
                                 className="object-contain"
@@ -87,7 +89,7 @@ export default function Home() {
                     <div className="flex flex-col items-center mb-4">
                         <div className="relative w-24 h-24 mb-4">
                             <Image
-                                src="/admin.png"
+                                src={getImagePath("/admin.png")}
                                 alt="Admin Portal"
                                 fill
                                 className="object-contain"
