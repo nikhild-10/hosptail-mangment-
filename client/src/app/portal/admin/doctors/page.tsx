@@ -28,7 +28,8 @@ export default function DoctorsManagement() {
 
     const filteredDoctors = doctors.filter(doctor =>
         doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase())
+        doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        doctor.id.toString().includes(searchTerm)
     );
 
     const columns = [
@@ -40,7 +41,7 @@ export default function DoctorsManagement() {
                         {doctor.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                     </div>
                     <div>
-                        <div className="font-medium text-slate-900 dark:text-white">{doctor.name}</div>
+                        <div className="font-medium text-slate-900 dark:text-white">{doctor.name} <span className="text-xs text-slate-400 font-normal">#{doctor.id}</span></div>
                         <div className="text-xs text-slate-500">{doctor.specialty}</div>
                     </div>
                 </div>
@@ -63,8 +64,8 @@ export default function DoctorsManagement() {
             header: 'Status',
             accessor: (doctor: Doctor) => (
                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${doctor.status === 'Active'
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
-                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30'
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30'
+                    : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30'
                     }`}>
                     {doctor.status}
                 </span>
@@ -91,7 +92,7 @@ export default function DoctorsManagement() {
                 <Search className="text-slate-400" size={20} />
                 <input
                     type="text"
-                    placeholder="Search by name or specialty..."
+                    placeholder="Search by name, ID, or specialty..."
                     className="flex-1 bg-transparent border-none focus:outline-none text-slate-900 dark:text-white placeholder-slate-400"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}

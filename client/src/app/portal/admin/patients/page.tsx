@@ -30,7 +30,8 @@ export default function PatientsManagement() {
 
     const filteredPatients = patients.filter(patient =>
         patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        patient.condition.toLowerCase().includes(searchTerm.toLowerCase())
+        patient.condition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        patient.id.toString().includes(searchTerm)
     );
 
     const columns = [
@@ -42,7 +43,7 @@ export default function PatientsManagement() {
                         <User size={20} />
                     </div>
                     <div>
-                        <div className="font-medium text-slate-900 dark:text-white">{patient.name}</div>
+                        <div className="font-medium text-slate-900 dark:text-white">{patient.name} <span className="text-xs text-slate-400 font-normal">#{patient.id}</span></div>
                         <div className="text-xs text-slate-500">{patient.age} yrs • {patient.gender}</div>
                     </div>
                 </div>
@@ -83,7 +84,7 @@ export default function PatientsManagement() {
                 <Search className="text-slate-400" size={20} />
                 <input
                     type="text"
-                    placeholder="Search patients by name or condition..."
+                    placeholder="Search patients by name, ID, or condition..."
                     className="flex-1 bg-transparent border-none focus:outline-none text-slate-900 dark:text-white placeholder-slate-400"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
