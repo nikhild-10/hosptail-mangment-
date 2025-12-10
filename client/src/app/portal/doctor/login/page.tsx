@@ -64,6 +64,9 @@ export default function DoctorLogin() {
                     <div className="mt-4 text-center text-sm">
                         <Link href="/" className="text-gray-500 hover:underline">Back to Home</Link>
                     </div>
+                    <div className="mt-2 text-center text-sm">
+                        <Link href="/portal/doctor/register" className="text-blue-600 hover:underline">New Doctor? Register here</Link>
+                    </div>
                 </CardContent>
             </Card>
         </div>
