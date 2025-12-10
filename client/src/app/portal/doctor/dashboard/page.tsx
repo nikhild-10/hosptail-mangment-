@@ -1,7 +1,26 @@
 'use client';
 
 import React from 'react';
-import { Users, Calendar, Activity, Clock, Video, FileText, Smartphone } from 'lucide-react';
+import { Users, Calendar, Activity, Clock, Video, FileText, Smartphone, TrendingUp } from 'lucide-react';
+import {
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    PieChart, Pie, Cell
+} from 'recharts';
+
+const appointmentData = [
+    { name: 'Mon', count: 8 },
+    { name: 'Tue', count: 12 },
+    { name: 'Wed', count: 7 },
+    { name: 'Thu', count: 15 },
+    { name: 'Fri', count: 10 },
+    { name: 'Sat', count: 4 },
+];
+
+const patientTypeData = [
+    { name: 'General', value: 45, color: '#3b82f6' },
+    { name: 'Specialist', value: 25, color: '#8b5cf6' },
+    { name: 'Follow-up', value: 30, color: '#10b981' },
+];
 
 export default function DoctorDashboard() {
     return (
@@ -12,7 +31,7 @@ export default function DoctorDashboard() {
                     <p className="text-slate-500 dark:text-slate-400 mt-2">Welcome back, Dr. Wilson. You have 4 appointments today.</p>
                 </div>
                 <div className="flex gap-4">
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors">
+                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-sm cursor-pointer">
                         <Video size={18} /> Start Telemedicine
                     </button>
                 </div>
@@ -26,7 +45,7 @@ export default function DoctorDashboard() {
                     { label: 'Consultations', value: '85', icon: Activity, color: 'green' },
                     { label: 'Online Now', value: '3', icon: Smartphone, color: 'orange' },
                 ].map((stat, i) => (
-                    <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm transition-transform hover:-translate-y-1">
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</p>
@@ -38,6 +57,66 @@ export default function DoctorDashboard() {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Analytics Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                        <Activity size={20} className="text-blue-500" /> Weekly Consultations
+                    </h3>
+                    <div className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={appointmentData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} />
+                                <Tooltip
+                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    cursor={{ fill: '#f1f5f9' }}
+                                />
+                                <Bar dataKey="count" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                        <TrendingUp size={20} className="text-purple-500" /> Case Distribution
+                    </h3>
+                    <div className="flex items-center justify-between">
+                        <div className="h-[300px] w-1/2">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={patientTypeData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {patientTypeData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div className="w-1/2 space-y-4">
+                            {patientTypeData.map((entry, i) => (
+                                <div key={i} className="flex items-center gap-2 text-sm">
+                                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
+                                    <span className="font-medium text-slate-700 dark:text-slate-300">{entry.name}</span>
+                                    <span className="ml-auto text-slate-500">{entry.value}%</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

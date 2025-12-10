@@ -15,19 +15,15 @@ export default function DoctorLogin() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            const res = await api.post('/auth/login', { email, password });
+        setError('');
 
-            if (res.data.user.role === 'DOCTOR') {
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('user', JSON.stringify(res.data.user));
-                router.push('/portal/doctor/dashboard');
-            } else {
-                setError('Access Denied. Doctors only.');
-                localStorage.clear();
-            }
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed');
+        // Mock Login for Frontend Demo
+        // In a real app, this would be an API call
+        if (email && password) {
+            localStorage.setItem('user', JSON.stringify({ name: 'Dr. John Doe', role: 'DOCTOR' }));
+            router.push('/portal/doctor/dashboard');
+        } else {
+            setError('Please enter valid credentials');
         }
     };
 
